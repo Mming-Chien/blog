@@ -2,16 +2,12 @@
 {% block content %}
 	<p>Where people can make their own blog</p>
 	<p>Blogs:</p>
-	<p>
-		<a href="{% url 'blogs:new_blog' %}">Add new blog</a>
-	</p>
 	<ul>
 		{% for blog in blogs %}
 			<li>
 				<p>{{ blog.date_added|date:'M d, Y H:i' }}</p>
 				<p>Title: {{ blog.title }}</p>
 				<p>{{ blog.text|linebreaks }}</p>
-				<p><a href="{% url 'blogs:edit_blog' blog.id %}">Edit blog</a></p>
 
 			</li>
 		{% empty %}
