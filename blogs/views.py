@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from .models import BlogPost
 from .forms import BlogForm
 # Create your views here.
@@ -9,6 +10,7 @@ def index(request):
 	context = {"blogs": blogs}
 	return render(request, "blogs/index.html", context)
 
+@login_required
 def new_blog(request):
 	""" The page for adding new blog"""
 	if request.method != 'POST':
@@ -24,6 +26,7 @@ def new_blog(request):
 	context = {"form": form}
 	return render(request, "blogs/new_blog.html",context)
 
+@login_required
 def edit_blog(request,blog_id):
 	""" Edit existing blog"""
 	blog = BlogPost.objects.get(id=blog_id)
