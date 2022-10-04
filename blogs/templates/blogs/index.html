@@ -11,7 +11,9 @@
 				<p>{{ blog.date_added|date:'M d, Y H:i' }}</p>
 				<p>Title: {{ blog.title }}</p>
 				<p>{{ blog.text|linebreaks }}</p>
-				<p><a href="{% url 'blogs:edit_blog' blog.id %}">Edit blog</a></p>
+				{% if blog.owner == request.user %}
+					<p><a href="{% url 'blogs:edit_blog' blog.id %}">Edit blog</a></p>
+				{% endif %}
 
 			</li>
 		{% empty %}

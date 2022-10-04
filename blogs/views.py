@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from .models import BlogPost
 from .forms import BlogForm
 # Create your views here.
@@ -20,7 +21,9 @@ def new_blog(request):
 		# POST data submitted, process data
 		form = BlogForm(data =  request.POST)
 		if form.is_valid():
-			new_log = form.save()
+			new_blog = form.save(commit = False)
+			new_blog.owner = request.user
+			new_blog.save()
 			return redirect("blogs:index")
 	# Display a blank or invalid form
 	context = {"form": form}
@@ -30,6 +33,11 @@ def new_blog(request):
 def edit_blog(request,blog_id):
 	""" Edit existing blog"""
 	blog = BlogPost.objects.get(id=blog_id)
+	# Make sure users edit their own posts
+	if blog.owner != request.user:
+		raise Http404
+
+
 	if request.method != "POST":
 		# Initial request, pre-fill form with the current blog
 		form = BlogForm(instance=blog )
