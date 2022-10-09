@@ -1,26 +1,33 @@
 {% extends "blogs/base.html" %}
+{% block page_header %}
+	<h1 class="text-primary">Where people can share their own blogs</h1>
+{% endblock page_header %}
 {% block content %}
-	<p>Where people can make their own blog</p>
-	<p>Blogs:</p>
 	<p>
-		<a href="{% url 'blogs:new_blog' %}">Add new blog</a>
+		<a class="btn btn-outline-primary" href="{% url 'blogs:new_blog' %}">Add new blog</a>
 	</p>
-	<ul>
 		{% for blog in blogs %}
-			<li>
-				<p>{{ blog.date_added|date:'M d, Y H:i' }}</p>
-				<p>Title: {{ blog.title }}</p>
-				<p>{{ blog.text|linebreaks }}</p>
-				{% if blog.owner == request.user %}
-					<p><a href="{% url 'blogs:edit_blog' blog.id %}">Edit blog</a></p>
-				{% endif %}
 
-			</li>
+			<div class="card mb-3">
+				<h4 class="card-header">
+					<small style="font-size: 90%">{{ blog.date_added|date:'M d, Y H:i' }}</small>
+					<div class="d-flex justify-content-between">	
+					<p class="text-primary ">{{ blog.title }}</p>
+					{% if blog.owner == request.user %}
+					<a style="font-size: 70%;" class="link text-secondary text-sm " href="{% url 'blogs:edit_blog' blog.id %}">Edit</a>
+					{% endif %}
+					</div>				
+				</h4>
+				<div class="card-body">
+					{{ blog.text|linebreaks }}
+				</div>
+			</div>
+				
 		{% empty %}
-			<li>There's no blogs yet.</li>
+			<p>There's no blogs yet.</p>
 		{% endfor %}
 
-	</ul>
+
 
 
 {% endblock content %}
